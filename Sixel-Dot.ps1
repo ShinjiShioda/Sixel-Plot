@@ -16,7 +16,7 @@ function Global:Sixel-Dot(){
 	$cposy= [math]::Floor( $y / 20);
 
 	# エスケープシーケンス出力用文字列変数の初期化、CUPで文字カーソル位置を移動
-	$outstring	= "${CSI}$(1+$cposy);$(1+$cposx)H"
+	$outstring = "${CSI}$(1+$cposy);$(1+$cposx)H"
 
 	# Sixelのエスケープシーケンス開始。描画色は$cで指定
 	$outstring += "${SIXELS}#${c}";
@@ -37,7 +37,6 @@ function Global:Sixel-Dot(){
 	}
 
 	# Sixel内の1のビットを計算
-	#$nsy=$sy % 6
 	$wp=[math]::Pow( 2,$sy % 6)
 
 	# Sixel文字に変換
