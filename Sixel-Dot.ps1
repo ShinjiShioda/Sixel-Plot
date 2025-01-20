@@ -48,7 +48,7 @@ function Global:Sixel-Dot(){
 	# デバッグ用。オプション$VarDumpが指定されていたら変数を出力し、エスケープシーケンスを16進数ダンプ
 	if($VarDump){
 		if( $x -lt 100 ) {$dpos=10} else {$dpos=1}
-		Write-Host "`e[$dpos;1HX:$x Y:$y x:$cposx y:$cposy sx:$sx sy=$sy wp=$wp nCr=$nCr               "
+		Write-Host "${ESC}[$dpos;1HX:$x Y:$y x:$cposx y:$cposy sx:$sx sy=$sy wp=$wp nCr=$nCr               "
 		$outstring | format-hex
 	}
 
@@ -94,25 +94,23 @@ function Global:Line {
 		[int]$c
 	)
 	$dx = [math]::Abs($x1 - $x0)
-	$dy = [math]::Abs($y1-$y0)
+	$dy = [math]::Abs($y1 - $y0)
 	$sx=0
 	$sy=0
-	$oX0 = $x0
-	$oY0 = $y0
 	if($x0 -lt $x1) { $sx=1} else {$sx=-1}
 	if($y0 -lt $y1) { $sy=1} else {$sy=-1}
-	$err = $dx -$dy
+	$err = $dx - $dy
 	do{
-		Write-Output (,@($oX0,$oY0,$c))
-		if( ($oX0 -eq $x1) -and ($oY0 -eq $y1)) { break}
+		Write-Output (,@($x0,$y0,$c))
+		if( ($x0 -eq $x1) -and ($y0 -eq $y1)) { break }
 		$e2=2 * $err
 		if($e2 -gt  -1*$dy) {
 			$err -= $dy
-			$oX0 += $sx
+			$x0 += $sx
 		}
 		if($e2 -lt $dx){
 			$err += $dx
-			$oY0 += $sy
+			$y0 += $sy
 		}
 	}
 	while($true)
@@ -157,4 +155,4 @@ Line 200 0 0 400 13 | Plot-SixelArray
 Line 400 400 200 0 13 | Plot-SixelArray
 Line 0 0 400 400 13 | Plot-SixelArray
 Circle 200 200 200 12 | %{ Plot-SixelArray $_[0] }
-Write-Host "`e[21;1H"
+Write-Host "$([char]27)[21;1H"
