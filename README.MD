@@ -36,3 +36,20 @@ Sixel描画評価のためのコードなので、十分にテストしていま
 
 描画色	Sixelのカラーレジスタ番号。0～255
 
+Plot-SixelArrayに出力を入れます。
+
+`Box 0 0 400 400 15 | Plot-SixelArray`
+
+`Line 200 0 200 400 13 | Plot-SixelArray`
+
+## Circle	円の描画（ブレゼンハムベース）
+
+円を描く座標ベクトルを出力する。
+
+**書式**
+
+`Circle 中心X座標 中心Y座標 半径 描画色`
+
+Circleでは、以下のように描画を行わせます。
+
+`Circle 200 200 200 12 | %{ Plot-SixelArray $_[0] }`
