@@ -68,7 +68,7 @@ function Global:Plot-SixelArray(){
 	)
 	begin{}
 	Process{
-		Sixel-Dot -x $p1[0] -y $p1[1] -c $p1[2]
+			Sixel-Dot -x $p1[0] -y $p1[1] -c $p1[2]
 	}
 	end{}
 }
@@ -79,6 +79,7 @@ function Global:Plot-SixelArray-Debug(){
 	)
 	begin{}
 	Process{
+		Write-Host "--${p1}--"
 		Sixel-Dot -x $p1[0] -y $p1[1] -c $p1[2] -pause -VarDump
 	}
 	end{}
@@ -129,6 +130,31 @@ function global:Box(){
 	Line $x0 $y1 $x1 $y1 $c
 	Line $x1 $y1 $x1 $y0 $c
 }
+function global:Circle(){
+	param(
+		[int]$x0,
+		[int]$y0,
+		[int]$r,
+		[int]$c
+	)
+	$x = $r
+	$y = 0
+	$Err = -2 * $r + 3
+	while ($x -ge $y) {
+		Write-Output (,@(($x0+$x),($y0+$y),$c)),(,@(($x0-$x),($y0+$y),$c)),(,@(($x0+$x),($y0-$y),$c)),(,@(($x0-$x),($y0-$y),$c)),(,@(($x0+$y),($y0+$x),$c)),(,@(($x0-$y),($y0+$x),$c)),(,@(($x0+$y),($y0-$x),$c)),(,@(($x0-$y),($y0-$x),$c))
+		if( $Err -ge 0 ){
+			$x--
+			$Err -= 4 *$x
+		}
+		$y++
+		$Err += 4*$y+2
+	}
+}
 cls
-Box 10 10 330 330 15 | Plot-SixelArray
-Line 10 10 330 330 13 | Plot-SixelArray
+Box 0 0 400 400 15 | Plot-SixelArray
+Line 200 0 200 400 13 | Plot-SixelArray
+Line 200 0 0 400 13 | Plot-SixelArray
+Line 400 400 200 0 13 | Plot-SixelArray
+Line 0 0 400 400 13 | Plot-SixelArray
+Circle 200 200 200 12 | %{ Plot-SixelArray $_[0] }
+Write-Host "`e[21;1H"
